@@ -24,6 +24,7 @@ jobs:
       run: |
         npm install
         npm run build
+        npm install wrangler
         
     - name: Publish to Cloudflare Workers Sites
       run: |
