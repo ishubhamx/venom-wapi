@@ -12,7 +12,12 @@ import { tokenSession } from '../config/tokenSession.config';
 import { checkFileJson } from '../api/helpers/check-token-file';
 import { SocketState, SocketStream } from '../api/model/enum';
 import { SessionTokenCkeck, saveToken, isBeta } from './auth';
-import { initWhatsapp, initBrowser, injectApi } from './browser';
+import {
+  initWhatsapp,
+  initBrowser,
+  injectApi,
+  getWhatsappPage
+} from './browser';
 import { welcomeScreen } from './welcome';
 const path = require('path');
 /**
@@ -116,7 +121,7 @@ export async function create(
 
   logger.info(`${chalk.underline('https://orkestral.io - official site!')}\n`);
 
-  statusFind && statusFind('initBrowser', this.session);
+  statusFind && statusFind('initBrowser', session);
 
   // Initialize whatsapp
   if (mergedOptions.browserWS) {
@@ -131,7 +136,7 @@ export async function create(
     logger.info('Error when try to connect ' + mergedOptions.browserWS, {
       session
     });
-    statusFind && statusFind('serverWssNotConnected', this.session);
+    statusFind && statusFind('serverWssNotConnected', session);
     throw `Error when try to connect ${mergedOptions.browserWS}`;
   }
 
@@ -140,7 +145,7 @@ export async function create(
     logger.info('Error no open browser.... ', {
       session
     });
-    statusFind && statusFind('noOpenBrowser', this.session);
+    statusFind && statusFind('noOpenBrowser', session);
     throw `Error no open browser....`;
   }
 
@@ -148,9 +153,9 @@ export async function create(
     logger.info('Has been properly connected to the wss server', {
       session
     });
-    statusFind && statusFind('connectBrowserWs', this.session);
+    statusFind && statusFind('connectBrowserWs', session);
   } else {
-    statusFind && statusFind('openBrowser', this.session);
+    statusFind && statusFind('openBrowser', session);
     logger.info('Browser successfully opened', {
       session
     });
@@ -193,8 +198,10 @@ export async function create(
       session
     });
 
-    statusFind && statusFind('initWhatsapp', this.session);
-    // Initialize whatsapp
+    statusFind && statusFind('initWhatsapp', session);
+
+    const newPage: Page = await getWhatsappPage(browser);
+    const client = new Whatsapp(newPage, session, mergedOptions);
     const page: false | Page = await initWhatsapp(
       session,
       mergedOptions,
@@ -211,16 +218,14 @@ export async function create(
         session
       });
 
-      statusFind && statusFind('erroPageWhatsapp', this.session);
+      statusFind && statusFind('erroPageWhatsapp', session);
       throw 'Error when trying to access the page: "https://web.whatsapp.com"';
     }
 
-    statusFind && statusFind('successPageWhatsapp', this.session);
+    statusFind && statusFind('successPageWhatsapp', session);
     logger.info(`${chalk.green('Page successfully accessed')}`, {
       session
     });
-
-    const client = new Whatsapp(page, session, mergedOptions);
 
     client.onStreamChange(async (stateStream) => {
       if (stateStream === SocketStream.CONNECTED) {
@@ -299,7 +304,7 @@ export async function create(
         console.log(`\nDebug: Option waitForLogin it's true. waiting...`);
       }
 
-      statusFind && statusFind('waitForLogin', this.session);
+      statusFind && statusFind('waitForLogin', session);
 
       const isLogged = await client.waitForLogin(catchQR, statusFind);
 
@@ -344,7 +349,7 @@ export async function create(
       );
     }
 
-    statusFind && statusFind('waitChat', this.session);
+    statusFind && statusFind('waitChat', session);
 
     await page.waitForSelector('#app .two', { visible: true }).catch(() => {});
 
@@ -390,7 +395,7 @@ export async function create(
     if (mergedOptions.debug) {
       console.log(`\nDebug: injecting Api done...`);
     }
-    statusFind && statusFind('successChat', this.session);
+    statusFind && statusFind('successChat', session);
     return client;
   }
 }

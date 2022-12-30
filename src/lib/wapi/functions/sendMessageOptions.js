@@ -24,7 +24,7 @@ export async function sendMessageOptions(chatId, content, options = {}) {
       null,
       false
     );
-    if (quotedMessage && quotedMessage.canReply()) {
+    if (quotedMessage) {
       quotedMsgOptions = quotedMessage.msgContextInfo(chat);
     }
     delete options.quotedMessageId;

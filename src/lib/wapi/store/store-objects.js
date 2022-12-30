@@ -48,6 +48,11 @@ export const storeObjects = [
     conditions: (module) => (module.validateWid ? module : null),
   },
   {
+    id: 'EphemeralFields',
+    conditions: (module) =>
+      module.getEphemeralFields ? module : null
+  },
+  {
     id: 'State',
     conditions: (module) => (module.Socket ? module : null),
   },
@@ -295,6 +300,10 @@ export const storeObjects = [
     conditions: (module) =>
       module.Cmd && module.Cmd.openChatFromUnread ? module.Cmd : null
   },
+  { id: "WapQuery",
+   conditions: (module) =>
+    (module.queryExist) ? module : ((module.default && module.default.queryExist) ? module.default : null)
+  },
   {
     id: 'checkNumberMD',
     conditions: (module) =>
@@ -420,6 +429,11 @@ export const storeObjects = [
     id: 'sendDemoteParticipants',
     conditions: (module) =>
       module.sendDemoteParticipants ? module.sendDemoteParticipants : null
+  },
+  {
+    id: 'queryExist',
+    conditions: (module) =>
+      module.queryExist ?  module.queryExist : null,
   },
   {
     id: 'checkNumberBeta',

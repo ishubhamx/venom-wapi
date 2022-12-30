@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /*
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
@@ -53,11 +52,18 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNMMNMNMMMNMMNNMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNMMNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 */
-export async function clearChatMessages(chatId) {
-  const chat = await Store.Chat.get(chatId);
-  if (chat) {
-    return await WPP.chat.clear(chatId, true);
-  } else {
-    return false;
+export const _serializeNumberStatusObj = (obj) => {
+  if (obj == undefined) {
+    return null;
   }
-}
+
+  return Object.assign(
+    {},
+    {
+      id: obj.jid,
+      status: obj.status,
+      isBusiness: obj.biz === true,
+      canReceiveMessage: obj.status === 200
+    }
+  );
+};
