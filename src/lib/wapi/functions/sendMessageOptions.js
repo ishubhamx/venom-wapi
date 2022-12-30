@@ -1,4 +1,3 @@
-
 /**
  * Send message with options
  * @param {string} chatid the numberid xxx@c.us

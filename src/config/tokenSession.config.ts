@@ -1,4 +1,3 @@
-
 export interface tokenSession {
   WABrowserId: string;
   WAToken1: string;

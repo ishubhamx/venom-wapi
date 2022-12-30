@@ -1,4 +1,3 @@
-
 export async function getListMute(type = 'all') {
   var muteList = (await window.Store.Mute)._models,
     noMute = new Array(),

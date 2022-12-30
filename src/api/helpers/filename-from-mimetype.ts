@@ -1,4 +1,3 @@
-
 import * as path from 'path';
 import * as mime from 'mime-types';
 

@@ -1,4 +1,3 @@
-
 export function addOnStateChange() {
   let initialized = false;
   const getData = () => {

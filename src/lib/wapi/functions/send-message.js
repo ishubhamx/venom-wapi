@@ -1,4 +1,3 @@
-
 export async function sendMessage(to, content) {
   if (typeof content != 'string' || content.length === 0) {
     return WAPI.scope(

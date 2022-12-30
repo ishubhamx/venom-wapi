@@ -1,4 +1,3 @@
-
 export enum GroupSettings {
   /**
    * Define how can send message in the group

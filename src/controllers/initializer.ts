@@ -1,4 +1,3 @@
-
 import * as chalk from 'chalk';
 
 import { readFileSync } from 'fs';
